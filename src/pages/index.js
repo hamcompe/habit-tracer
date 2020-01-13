@@ -7,6 +7,7 @@ import SEO from "../components/seo"
 import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import tw from "tailwind.macro"
+import base from "../lib/api"
 
 const Button = styled.button`
   ${tw`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded`};
@@ -18,7 +19,23 @@ const Form = styled.form`
 const fieldName = "task-name"
 
 const IndexPage = () => {
-  const [tasks, setTasks] = React.useState([])
+  const [habits, setHabits] = React.useState([])
+  React.useEffect(() => {
+    base("habits")
+      .select({
+        view: "Grid view",
+        filterByFormula: "NOT({habit} = '')",
+      })
+      .firstPage((err, records) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        const fetchedHabits = records.map(record => record.get("habit"))
+
+        setHabits(fetchedHabits)
+      })
+  }, [])
 
   return (
     <Layout>
@@ -32,7 +49,7 @@ const IndexPage = () => {
           Tasks
         </h1>
         <ul>
-          {tasks.map(task => (
+          {habits.map(task => (
             <li key={task}>
               <Link to={`/tasks?id=${task}`}>{task}</Link>
             </li>
@@ -49,7 +66,7 @@ const IndexPage = () => {
             element.value = null
           })
 
-          setTasks(tasks.concat(value))
+          setHabits(habits.concat(value))
         }}
       >
         <div
@@ -79,7 +96,7 @@ const IndexPage = () => {
             ${tw`flex items-center justify-between`}
           `}
         >
-          <Button type="button">Add</Button>
+          <Button type="submit">Add</Button>
         </div>
       </Form>
     </Layout>

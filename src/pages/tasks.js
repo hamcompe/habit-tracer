@@ -7,6 +7,7 @@ import SEO from "../components/seo"
 import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import tw from "tailwind.macro"
+import base from "../lib/api"
 
 const Grid = styled.div`
   display: grid;
@@ -25,8 +26,28 @@ const getNumListByLength = length =>
 const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate()
 
 const IndexPage = ({ location }) => {
-  console.log(queryString.parse(location.search))
+  const { id } = queryString.parse(location.search) || {}
   const [didItList, setDidItList] = React.useState([])
+
+  React.useEffect(() => {
+    base("dates")
+      .select({
+        view: "Grid view",
+        filterByFormula: `AND(NOT({date} = ''), habit = '${id}')`,
+      })
+      .firstPage(function(err, records) {
+        if (err) {
+          console.error(err)
+          return
+        }
+        const fetchedDates = records.map(record => record.get("date"))
+
+        const didItDates = fetchedDates
+          .map(date => new Date(date))
+          .map(date => date.getDate())
+        setDidItList(didItDates)
+      })
+  }, [id])
 
   const numDays = getDaysInMonth(2020, 1)
   const days = getNumListByLength(numDays)
@@ -34,7 +55,7 @@ const IndexPage = ({ location }) => {
   return (
     <Layout>
       <SEO title="Tasks" />
-      <h1>Tasks</h1>
+      <h1>Tasks: {id}</h1>
       <Grid>
         <HeaderColumn>Sun</HeaderColumn>
         <HeaderColumn>Mon</HeaderColumn>

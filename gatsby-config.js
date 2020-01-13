@@ -1,3 +1,5 @@
+require("dotenv").config()
+
 module.exports = {
   siteMetadata: {
     title: `Habit tracer`,
@@ -5,6 +7,20 @@ module.exports = {
     author: `@hamcompe`,
   },
   plugins: [
+    {
+      resolve: "gatsby-plugin-firebase",
+      options: {
+        features: {
+          auth: false,
+          database: false,
+          firestore: true,
+          storage: false,
+          messaging: false,
+          functions: false,
+          performance: false,
+        },
+      },
+    },
     `gatsby-plugin-sass`,
     `gatsby-plugin-typescript`,
     `gatsby-plugin-emotion`,

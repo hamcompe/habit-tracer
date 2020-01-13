@@ -7,7 +7,7 @@ import SEO from "../components/seo"
 import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import tw from "tailwind.macro"
-import base from "../lib/api"
+import { FirebaseContext } from "gatsby-plugin-firebase"
 
 const Grid = styled.div`
   display: grid;
@@ -24,30 +24,48 @@ const HeaderColumn = styled.div`
 const getNumListByLength = length =>
   Array.from({ length }).map((_, idx) => idx + 1)
 const getDaysInMonth = (year, month) => new Date(year, month, 0).getDate()
+const getDateFromDay = ({ year = 2020, month = 0, day }) =>
+  new Date(year, month, day)
 
 const IndexPage = ({ location }) => {
   const { id } = queryString.parse(location.search) || {}
-  const [didItList, setDidItList] = React.useState([])
+  const firebase = React.useContext(FirebaseContext)
+  const [habit, setHabit] = React.useState(null)
+  const [didAtList, setDidAtList] = React.useState([])
+  const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
-    base("dates")
-      .select({
-        view: "Grid view",
-        filterByFormula: `AND(NOT({date} = ''), habit = '${id}')`,
-      })
-      .firstPage(function(err, records) {
-        if (err) {
-          console.error(err)
-          return
-        }
-        const fetchedDates = records.map(record => record.get("date"))
+    if (!firebase) {
+      return
+    }
 
-        const didItDates = fetchedDates
-          .map(date => new Date(date))
-          .map(date => date.getDate())
-        setDidItList(didItDates)
+    firebase
+      .firestore()
+      .collection("habits")
+      .doc(id)
+      .get()
+      .then(doc => doc.data())
+      .then(data => {
+        setHabit(data.habit)
+        return data.didAtList
+          .map(timestamp => timestamp.seconds)
+          .map(dateSec => new Date(dateSec * 1000))
       })
-  }, [id])
+      .then(setDidAtList)
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [firebase, id])
+
+  const updateList = didAtList => {
+    firebase
+      .firestore()
+      .collection("habits")
+      .doc(id)
+      .update({
+        didAtList,
+      })
+  }
 
   const numDays = getDaysInMonth(2020, 1)
   const days = getNumListByLength(numDays)
@@ -55,31 +73,46 @@ const IndexPage = ({ location }) => {
   return (
     <Layout>
       <SEO title="Tasks" />
-      <h1>Tasks: {id}</h1>
-      <Grid>
-        <HeaderColumn>Sun</HeaderColumn>
-        <HeaderColumn>Mon</HeaderColumn>
-        <HeaderColumn>Tue</HeaderColumn>
-        <HeaderColumn>Wed</HeaderColumn>
-        <HeaderColumn>Thu</HeaderColumn>
-        <HeaderColumn>Fri</HeaderColumn>
-        <HeaderColumn>Sat</HeaderColumn>
-        {days.map(day => (
-          <Column
-            key={day}
-            onClick={() => {
-              if (didItList.find(didIt => didIt === day)) {
-                setDidItList(didItList.filter(didIt => didIt !== day))
-              } else {
-                setDidItList(didItList.concat(day))
-              }
-            }}
-            marked={didItList.find(didIt => didIt === day)}
-          >
-            {day}
-          </Column>
-        ))}
-      </Grid>
+      <h1>Tasks: {habit}</h1>
+
+      {loading ? (
+        <div>loading</div>
+      ) : (
+        <Grid>
+          <HeaderColumn>Sun</HeaderColumn>
+          <HeaderColumn>Mon</HeaderColumn>
+          <HeaderColumn>Tue</HeaderColumn>
+          <HeaderColumn>Wed</HeaderColumn>
+          <HeaderColumn>Thu</HeaderColumn>
+          <HeaderColumn>Fri</HeaderColumn>
+          <HeaderColumn>Sat</HeaderColumn>
+          {days.map(day => {
+            const hasDone = didAtList.find(didAt => didAt.getDate() === day)
+            return (
+              <Column
+                key={day}
+                onClick={() => {
+                  if (hasDone) {
+                    const removedDayList = didAtList.filter(
+                      didAt => didAt.getDate() !== day
+                    )
+                    setDidAtList(removedDayList)
+                    updateList(removedDayList)
+                  } else {
+                    const newDate = getDateFromDay({ day })
+                    const newDidAtList = didAtList.concat(newDate)
+                    setDidAtList(newDidAtList)
+                    updateList(newDidAtList)
+                  }
+                }}
+                marked={hasDone}
+              >
+                {day}
+              </Column>
+            )
+          })}
+        </Grid>
+      )}
     </Layout>
   )
 }

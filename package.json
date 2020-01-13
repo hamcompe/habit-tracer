@@ -8,9 +8,11 @@
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "airtable": "^0.8.1",
+    "firebase": "^7.6.2",
     "gatsby": "^2.18.12",
     "gatsby-image": "^2.2.34",
     "gatsby-plugin-emotion": "^4.1.21",
+    "gatsby-plugin-firebase": "^0.1.7",
     "gatsby-plugin-manifest": "^2.2.31",
     "gatsby-plugin-offline": "^3.0.27",
     "gatsby-plugin-react-helmet": "^3.1.16",
@@ -29,6 +31,7 @@
     "tailwind.macro": "^1.0.0-alpha.10"
   },
   "devDependencies": {
+    "dotenv": "^8.2.0",
     "eslint-config-react-app": "^5.1.0",
     "prettier": "^1.19.1",
     "tailwindcss": "^1.1.4"

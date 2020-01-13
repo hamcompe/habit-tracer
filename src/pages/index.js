@@ -7,7 +7,7 @@ import SEO from "../components/seo"
 import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import tw from "tailwind.macro"
-import base from "../lib/api"
+import { useFirebase } from "gatsby-plugin-firebase"
 
 const Button = styled.button`
   ${tw`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded`};
@@ -20,21 +20,18 @@ const fieldName = "task-name"
 
 const IndexPage = () => {
   const [habits, setHabits] = React.useState([])
-  React.useEffect(() => {
-    base("habits")
-      .select({
-        view: "Grid view",
-        filterByFormula: "NOT({habit} = '')",
-      })
-      .firstPage((err, records) => {
-        if (err) {
-          console.error(err)
-          return
-        }
-        const fetchedHabits = records.map(record => record.get("habit"))
 
-        setHabits(fetchedHabits)
+  useFirebase(firebase => {
+    firebase
+      .firestore()
+      .collection("habits")
+      .get()
+      .then(snapshot => {
+        return snapshot.docs
+          .map(doc => ({ id: doc.id, value: doc.data() }))
+          .map(data => ({ ...data, value: data.value.habit }))
       })
+      .then(setHabits)
   }, [])
 
   return (
@@ -49,9 +46,9 @@ const IndexPage = () => {
           Tasks
         </h1>
         <ul>
-          {habits.map(task => (
-            <li key={task}>
-              <Link to={`/tasks?id=${task}`}>{task}</Link>
+          {habits.map(({ id, value }) => (
+            <li key={id}>
+              <Link to={`/tasks?id=${id}`}>{value}</Link>
             </li>
           ))}
         </ul>

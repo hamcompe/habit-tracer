@@ -5,6 +5,7 @@ module.exports = {
     author: `@hamcompe`,
   },
   plugins: [
+    `gatsby-plugin-sass`,
     `gatsby-plugin-typescript`,
     `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,

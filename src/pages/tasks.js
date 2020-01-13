@@ -47,9 +47,12 @@ const IndexPage = ({ location }) => {
       .then(doc => doc.data())
       .then(data => {
         setHabit(data.habit)
-        return data.didAtList
-          .map(timestamp => timestamp.seconds)
-          .map(dateSec => new Date(dateSec * 1000))
+
+        return !data.didAtList
+          ? []
+          : data.didAtList
+              .map(timestamp => timestamp.seconds)
+              .map(dateSec => new Date(dateSec * 1000))
       })
       .then(setDidAtList)
       .finally(() => {

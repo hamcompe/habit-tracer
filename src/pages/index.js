@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "gatsby"
 
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -14,41 +15,75 @@ const Form = styled.form`
   ${tw`w-full max-w-sm`}
 `
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <Form>
-      <div
-        css={css`
-          ${tw`md:flex md:items-center mb-6`}
-        `}
-      >
-        <label
+const fieldName = "task-name"
+
+const IndexPage = () => {
+  const [tasks, setTasks] = React.useState([])
+
+  return (
+    <Layout>
+      <SEO title="Home" />
+      <div>
+        <h1
           css={css`
-            ${tw`block text-gray-700 text-sm font-bold mb-2`}
+            ${tw`text-xl`}
           `}
-          htmlFor="task-name"
         >
-          Task name
-        </label>
-        <input
-          css={css`
-            ${tw`bg-gray-200 shadow appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500`}
-          `}
-          id="task-name"
-          type="text"
-          placeholder="Task name"
-        />
+          Tasks
+        </h1>
+        <ul>
+          {tasks.map(task => (
+            <li key={task}>
+              <Link to={`/tasks?id=${task}`}>{task}</Link>
+            </li>
+          ))}
+        </ul>
       </div>
-      <div
-        css={css`
-          ${tw`flex items-center justify-between`}
-        `}
+      <hr />
+      <Form
+        onSubmit={e => {
+          e.preventDefault()
+          const value = e.target.elements[fieldName].value
+
+          Array.from(e.target.elements).forEach(element => {
+            element.value = null
+          })
+
+          setTasks(tasks.concat(value))
+        }}
       >
-        <Button type="button">Add</Button>
-      </div>
-    </Form>
-  </Layout>
-)
+        <div
+          css={css`
+            ${tw`md:flex md:items-center mb-6`}
+          `}
+        >
+          <label
+            css={css`
+              ${tw`block text-gray-700 text-sm font-bold mb-2`}
+            `}
+            htmlFor={fieldName}
+          >
+            Task name
+          </label>
+          <input
+            css={css`
+              ${tw`bg-gray-200 shadow appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500`}
+            `}
+            id={fieldName}
+            type="text"
+            placeholder="Task name"
+          />
+        </div>
+        <div
+          css={css`
+            ${tw`flex items-center justify-between`}
+          `}
+        >
+          <Button type="button">Add</Button>
+        </div>
+      </Form>
+    </Layout>
+  )
+}
 
 export default IndexPage

@@ -8,7 +8,7 @@ import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import tw from "tailwind.macro"
 import { FirebaseContext } from "gatsby-plugin-firebase"
-import { getUser } from "../lib/auth"
+import withUser from "../helpers/with-user"
 
 const Button = styled.button`
   ${tw`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded`};
@@ -19,12 +19,10 @@ const Form = styled.form`
 
 const fieldName = "task-name"
 
-const IndexPage = () => {
+const IndexPage = ({ user }) => {
   const [habits, setHabits] = React.useState([])
   const [loading, setLoading] = React.useState(true)
   const firebase = React.useContext(FirebaseContext)
-
-  const user = getUser()
 
   React.useEffect(() => {
     if (!firebase) {
@@ -130,4 +128,4 @@ const IndexPage = () => {
   )
 }
 
-export default IndexPage
+export default withUser(IndexPage)

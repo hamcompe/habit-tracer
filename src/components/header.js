@@ -8,7 +8,7 @@ const Header = ({ siteTitle, user }) => {
   return (
     <header>
       <div className="container bg-red-500 mx-auto px-4 py-2 flex justify-between items-center">
-        <Link css={tw`text-xl font-semibold`} to="/">
+        <Link css={tw`text-xl font-extrabold text-gray-100`} to="/">
           {siteTitle}
         </Link>
         {user ? (

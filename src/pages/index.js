@@ -12,14 +12,14 @@ import withUser from "../helpers/with-user"
 import LoadingSpinner from "../components/loading-spinner"
 
 const Button = styled.button`
-  ${tw`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded`};
+  ${tw`bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded`};
 `
 const Form = styled.form`
   ${tw`w-full max-w-sm`}
 `
 const HabitItem = styled.li`
   transition: background 0.3s ease;
-  ${tw`border-b py-2 px-4 hover:bg-blue-200`}
+  ${tw`border-b py-2 px-4 hover:bg-gray-200`}
 `
 
 const fieldName = "task-name"
@@ -114,7 +114,7 @@ const IndexPage = ({ user }) => {
           </label>
           <input
             css={css`
-              ${tw`bg-gray-200 shadow appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500`}
+              ${tw`bg-gray-200 shadow appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-red-500`}
             `}
             id={fieldName}
             type="text"

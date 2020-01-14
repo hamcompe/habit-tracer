@@ -5,10 +5,12 @@ import { getUser, isLoggedIn } from "../lib/auth"
 const withUser = Component => props => {
   const user = getUser()
 
-  if (!isLoggedIn()) {
-    navigate("/login")
-    return null
-  }
+  React.useEffect(() => {
+    if (!isLoggedIn()) {
+      navigate("/login")
+      return null
+    }
+  }, [])
 
   return <Component {...props} user={user} />
 }

@@ -18,7 +18,7 @@ export const logout = firebase => {
     firebase
       .auth()
       .signOut()
-      .then(function() {
+      .then(() => {
         setUser({})
         resolve()
       })

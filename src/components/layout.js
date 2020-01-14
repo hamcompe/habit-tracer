@@ -10,7 +10,7 @@ import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
 
 import Header from "./header"
-import { getUser } from "../lib/auth"
+import { getUser, isLoggedIn } from "../lib/auth"
 import "normalize.css"
 import "./layout.scss"
 import tw from "tailwind.macro"
@@ -28,7 +28,10 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <Header siteTitle={data.site.siteMetadata.title} user={getUser()} />
+      <Header
+        siteTitle={data.site.siteMetadata.title}
+        user={{ ...getUser(), isLoggedIn: isLoggedIn() }}
+      />
       <div className="container" css={tw`mx-auto px-4`}>
         <main>{children}</main>
         <footer className="mt-4">

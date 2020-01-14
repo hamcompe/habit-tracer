@@ -6,14 +6,14 @@ import tw from "tailwind.macro"
 const Header = ({ siteTitle, user }) => {
   return (
     <header>
-      <div className="container bg-red-500 mx-auto px-4 flex justify-between">
-        <Link css={tw`text-xl`} to="/">
+      <div className="container bg-red-500 mx-auto px-4 py-2 flex justify-between items-center">
+        <Link css={tw`text-xl font-semibold`} to="/">
           {siteTitle}
         </Link>
         {user ? (
           <div css={tw`flex items-center`}>
             <img
-              className="w-10 h-10 rounded-full mr-4"
+              css={tw`w-10 h-10 rounded-full`}
               src={user.photoURL}
               alt={user.displayName}
             />

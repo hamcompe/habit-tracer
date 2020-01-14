@@ -13,6 +13,7 @@ import Header from "./header"
 import { getUser } from "../lib/auth"
 import "normalize.css"
 import "./layout.scss"
+import tw from "tailwind.macro"
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -28,14 +29,7 @@ const Layout = ({ children }) => {
   return (
     <>
       <Header siteTitle={data.site.siteMetadata.title} user={getUser()} />
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0px 1.0875rem 1.45rem`,
-          paddingTop: 0,
-        }}
-      >
+      <div className="container" css={tw`mx-auto px-4`}>
         <main>{children}</main>
         <footer className="mt-4">
           © {new Date().getFullYear()}, Built with ❤️ by{" "}

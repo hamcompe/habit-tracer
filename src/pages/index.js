@@ -8,6 +8,7 @@ import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import tw from "tailwind.macro"
 import { FirebaseContext } from "gatsby-plugin-firebase"
+import { getUser } from "../lib/auth"
 
 const Button = styled.button`
   ${tw`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded`};
@@ -23,6 +24,8 @@ const IndexPage = () => {
   const [loading, setLoading] = React.useState(true)
   const firebase = React.useContext(FirebaseContext)
 
+  const user = getUser()
+
   React.useEffect(() => {
     if (!firebase) {
       return
@@ -31,6 +34,7 @@ const IndexPage = () => {
     firebase
       .firestore()
       .collection("habits")
+      .where("userId", "==", user.uid)
       .get()
       .then(snapshot =>
         snapshot.docs
@@ -41,7 +45,7 @@ const IndexPage = () => {
       .finally(() => {
         setLoading(false)
       })
-  }, [firebase])
+  }, [firebase, user.uid])
 
   const handleSubmit = habit => {
     firebase

@@ -103,14 +103,10 @@ const IndexPage = ({ user }) => {
           handleSubmit(newHabit)
         }}
       >
-        <div
-          css={css`
-            ${tw`md:flex md:items-center mb-6`}
-          `}
-        >
+        <div css={tw`md:flex md:items-center mt-10 mb-6`}>
           <label
             css={css`
-              ${tw`block text-gray-700 text-sm font-bold mb-2`}
+              ${tw`block text-gray-700 text-m font-semibold mb-2`}
             `}
             htmlFor={fieldName}
           >

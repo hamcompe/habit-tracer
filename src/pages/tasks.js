@@ -77,7 +77,7 @@ const IndexPage = ({ location }) => {
   return (
     <Layout>
       <SEO title="Tasks" />
-      <h1>Tasks: {habit}</h1>
+      <h1 css={tw`text-xl font-semibold mb-4 mt-4`}>Task: {habit}</h1>
 
       {loading ? (
         <LoadingSpinner />

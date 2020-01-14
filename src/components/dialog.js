@@ -3,24 +3,25 @@ import styled from "@emotion/styled"
 import tw from "tailwind.macro"
 
 const DialogBackDrop = styled.div`
-  display: block;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
 `
 const DialogWrapper = styled.dialog`
   ${tw`rounded flex flex-col p-0 shadow-md`};
+  position: fixed;
+  top: 12%;
+  left: 50%;
   width: 500px;
   max-width: 85vw;
   min-height: 150px;
   background: #fff;
-  position: fixed;
-  top: 12%;
-  left: 50%;
   transform: translateX(-50%);
+  z-index: 50;
 `
 const ContentSection = styled.div`
   ${tw`mt-4 mb-auto py-2 px-4`};

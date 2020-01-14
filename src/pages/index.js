@@ -9,6 +9,7 @@ import { css } from "@emotion/core"
 import tw from "tailwind.macro"
 import { FirebaseContext } from "gatsby-plugin-firebase"
 import withUser from "../helpers/with-user"
+import LoadingSpinner from "../components/loading-spinner"
 
 const Button = styled.button`
   ${tw`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded`};
@@ -79,7 +80,7 @@ const IndexPage = ({ user }) => {
         </h1>
 
         {loading ? (
-          <div>loading</div>
+          <LoadingSpinner />
         ) : (
           <ul className="mb-4">
             {habits.map(({ id, value }) => (

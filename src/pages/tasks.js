@@ -8,6 +8,7 @@ import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import tw from "tailwind.macro"
 import { FirebaseContext } from "gatsby-plugin-firebase"
+import LoadingSpinner from "../components/loading-spinner"
 
 const Grid = styled.div`
   display: grid;
@@ -79,7 +80,7 @@ const IndexPage = ({ location }) => {
       <h1>Tasks: {habit}</h1>
 
       {loading ? (
-        <div>loading</div>
+        <LoadingSpinner />
       ) : (
         <Grid>
           <HeaderColumn>Sun</HeaderColumn>

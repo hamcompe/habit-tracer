@@ -16,6 +16,10 @@ const Button = styled.button`
 const Form = styled.form`
   ${tw`w-full max-w-sm`}
 `
+const HabitItem = styled.li`
+  transition: background 0.3s ease;
+  ${tw`border-b py-2 px-4 hover:bg-blue-200`}
+`
 
 const fieldName = "task-name"
 
@@ -33,6 +37,7 @@ const IndexPage = ({ user }) => {
       .firestore()
       .collection("habits")
       .where("userId", "==", user.uid)
+      .orderBy("createdAt")
       .get()
       .then(snapshot =>
         snapshot.docs
@@ -46,11 +51,15 @@ const IndexPage = ({ user }) => {
   }, [firebase, user.uid])
 
   const handleSubmit = habit => {
+    if (habit === "") return
+
     firebase
       .firestore()
       .collection("habits")
       .add({
         habit,
+        userId: user.uid,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(doc => {
         setHabits(habits.concat({ id: doc.id, value: habit }))
@@ -60,10 +69,10 @@ const IndexPage = ({ user }) => {
   return (
     <Layout>
       <SEO title="Home" />
-      <div>
+      <section className="mt-4">
         <h1
           css={css`
-            ${tw`text-xl`}
+            ${tw`text-xl font-semibold`}
           `}
         >
           Tasks
@@ -72,16 +81,15 @@ const IndexPage = ({ user }) => {
         {loading ? (
           <div>loading</div>
         ) : (
-          <ul>
+          <ul className="mb-4">
             {habits.map(({ id, value }) => (
-              <li key={id}>
-                <Link to={`/tasks?id=${id}`}>{value}</Link>
-              </li>
+              <Link to={`/tasks?id=${id}`} key={id}>
+                <HabitItem>{value}</HabitItem>
+              </Link>
             ))}
           </ul>
         )}
-      </div>
-      <hr />
+      </section>
       <Form
         onSubmit={e => {
           e.preventDefault()

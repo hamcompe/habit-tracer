@@ -10,6 +10,8 @@ import tw from "tailwind.macro"
 import { FirebaseContext } from "gatsby-plugin-firebase"
 import withUser from "../helpers/with-user"
 import LoadingSpinner from "../components/loading-spinner"
+import { Trash2 } from "react-feather"
+import Dialog from "../components/dialog"
 
 const Button = styled.button`
   ${tw`bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded`};
@@ -17,10 +19,24 @@ const Button = styled.button`
 const Form = styled.form`
   ${tw`w-full max-w-sm`}
 `
+const MenuButton = styled.button`
+  ${tw`invisible hover:bg-gray-100 rounded p-1`};
+`
 const HabitItem = styled.li`
   transition: background 0.3s ease;
-  ${tw`border-b py-2 px-4 hover:bg-gray-200`}
+  ${tw`flex justify-between items-center border-b py-2 px-4 hover:bg-gray-200`}
+
+  &:hover {
+    ${MenuButton} {
+      visibility: visible;
+    }
+  }
 `
+const DeleteButton = props => (
+  <MenuButton type="button" {...props}>
+    <Trash2 size={20} color="#a0aec0" />
+  </MenuButton>
+)
 
 const fieldName = "task-name"
 
@@ -51,6 +67,16 @@ const IndexPage = ({ user }) => {
       })
   }, [firebase, user.isLoggedIn, user.uid])
 
+  const handleRemove = docId => {
+    return firebase
+      .firestore()
+      .collection("habits")
+      .doc(docId)
+      .delete()
+      .then(() => {
+        setHabits(habits.filter(habit => habit.id !== docId))
+      })
+  }
   const handleSubmit = habit => {
     if (habit === "") return
 
@@ -67,9 +93,28 @@ const IndexPage = ({ user }) => {
       })
   }
 
+  const [openDialog, setOpenDialog] = React.useState(false)
+  const [processHabit, setProcessHabit] = React.useState({})
+
   return (
     <Layout>
       <SEO title="Home" />
+      <Dialog
+        content={
+          <>
+            Are you sure you want to delete{" "}
+            <strong>{processHabit.value}</strong>?
+          </>
+        }
+        open={openDialog}
+        onCancel={() => {
+          setOpenDialog(false)
+        }}
+        onSubmit={() => {
+          handleRemove(processHabit.id)
+          setOpenDialog(false)
+        }}
+      />
       <section className="mt-4">
         <h1
           css={css`
@@ -84,9 +129,19 @@ const IndexPage = ({ user }) => {
         ) : (
           <ul className="mb-4">
             {habits.map(({ id, value }) => (
-              <Link to={`/tasks?id=${id}`} key={id}>
-                <HabitItem>{value}</HabitItem>
-              </Link>
+              <HabitItem key={id}>
+                <Link to={`/tasks?id=${id}`} css={tw`block w-full`}>
+                  {value}
+                </Link>
+                <span>
+                  <DeleteButton
+                    onClick={() => {
+                      setOpenDialog(true)
+                      setProcessHabit({ id, value })
+                    }}
+                  />
+                </span>
+              </HabitItem>
             ))}
           </ul>
         )}

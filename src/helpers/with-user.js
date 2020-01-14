@@ -8,11 +8,11 @@ const withUser = Component => props => {
   React.useEffect(() => {
     if (!isLoggedIn()) {
       navigate("/login")
-      return null
+      return
     }
   }, [])
 
-  return <Component {...props} user={user} />
+  return <Component {...props} user={{ ...user, isLoggedIn: isLoggedIn() }} />
 }
 
 export default withUser

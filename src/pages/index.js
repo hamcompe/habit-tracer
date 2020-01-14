@@ -29,7 +29,7 @@ const IndexPage = ({ user }) => {
   const firebase = React.useContext(FirebaseContext)
 
   React.useEffect(() => {
-    if (!firebase) {
+    if (!firebase || !user.isLoggedIn) {
       return
     }
 
@@ -48,7 +48,7 @@ const IndexPage = ({ user }) => {
       .finally(() => {
         setLoading(false)
       })
-  }, [firebase, user.uid])
+  }, [firebase, user.isLoggedIn, user.uid])
 
   const handleSubmit = habit => {
     if (habit === "") return

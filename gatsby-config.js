@@ -11,7 +11,7 @@ module.exports = {
       resolve: "gatsby-plugin-firebase",
       options: {
         features: {
-          auth: false,
+          auth: true,
           database: false,
           firestore: true,
           storage: false,
@@ -21,7 +21,12 @@ module.exports = {
         },
       },
     },
-    `gatsby-plugin-sass`,
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        postCssPlugins: [require("tailwindcss")],
+      },
+    },
     `gatsby-plugin-typescript`,
     `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,

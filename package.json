@@ -9,6 +9,7 @@
     "@emotion/styled": "^10.0.27",
     "airtable": "^0.8.1",
     "firebase": "^7.6.2",
+    "firebaseui": "^4.4.0",
     "gatsby": "^2.18.12",
     "gatsby-image": "^2.2.34",
     "gatsby-plugin-emotion": "^4.1.21",
@@ -27,6 +28,7 @@
     "query-string": "^6.9.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-firebaseui": "^4.0.0",
     "react-helmet": "^5.2.1",
     "tailwind.macro": "^1.0.0-alpha.10"
   },

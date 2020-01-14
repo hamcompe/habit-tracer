@@ -1,35 +1,22 @@
 import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import React from "react"
+import tw from "tailwind.macro"
 
-const Header = ({ siteTitle }) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
-        <Link
-          to="/"
-          style={{
-            color: `white`,
-            textDecoration: `none`,
-          }}
-        >
+const Header = ({ siteTitle }) => {
+  return (
+    <header>
+      <div className="container bg-red-500 mx-auto px-4 flex justify-between">
+        <Link css={tw`text-xl`} to="/">
           {siteTitle}
         </Link>
-      </h1>
-    </div>
-  </header>
-)
+        <Link css={tw`text-xl`} to="/">
+          login
+        </Link>
+      </div>
+    </header>
+  )
+}
 
 Header.propTypes = {
   siteTitle: PropTypes.string,

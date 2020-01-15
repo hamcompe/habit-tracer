@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
       />
       <div className="container" css={tw`mx-auto px-4`}>
         <main>{children}</main>
-        <footer className="mt-4">
+        {/* <footer className="mt-4">
           © {new Date().getFullYear()}, Built with ❤️ by{" "}
           <a
             target="_blank"
@@ -43,7 +43,7 @@ const Layout = ({ children }) => {
           >
             HamComPe
           </a>
-        </footer>
+        </footer> */}
       </div>
     </>
   )

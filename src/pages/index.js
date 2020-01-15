@@ -10,12 +10,9 @@ import tw from "tailwind.macro"
 import { FirebaseContext } from "gatsby-plugin-firebase"
 import withUser from "../helpers/with-user"
 import LoadingSpinner from "../components/loading-spinner"
-import { Trash2 } from "react-feather"
+import { ArrowUp, Trash2 } from "react-feather"
 import Dialog from "../components/dialog"
 
-const Button = styled.button`
-  ${tw`bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded`};
-`
 const Form = styled.form`
   ${tw`w-full max-w-sm`}
 `
@@ -27,7 +24,7 @@ const MenuButton = styled.button`
 `
 const HabitItem = styled.li`
   transition: background 0.3s ease;
-  ${tw`flex justify-between items-center border-b py-2 px-4 hover:bg-gray-200`}
+  ${tw`flex justify-between items-center border-b py-2 px-4 hover:bg-gray-100`}
 
   /* On desktop show menu button on hover */
   @media (hover: hover) {
@@ -168,30 +165,23 @@ const IndexPage = ({ user }) => {
           handleSubmit(newHabit)
         }}
       >
-        <div css={tw`md:flex md:items-center mt-10 mb-6`}>
-          <label
-            css={css`
-              ${tw`block text-gray-700 text-m font-semibold mb-2`}
-            `}
-            htmlFor={fieldName}
-          >
-            Task name
-          </label>
+        <div
+          css={tw`flex fixed inset-x-0 bottom-0 p-4 border-t border-gray-200`}
+        >
           <input
             css={css`
-              ${tw`bg-gray-200 shadow appearance-none border-2 border-gray-200 rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-red-500`}
+              ${tw`bg-gray-100 appearance-none border border-gray-300 rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-red-500`}
             `}
             id={fieldName}
             type="text"
-            placeholder="Task name"
+            placeholder="New cool habit"
           />
-        </div>
-        <div
-          css={css`
-            ${tw`flex items-center justify-between`}
-          `}
-        >
-          <Button type="submit">Add</Button>
+          <button
+            type="submit"
+            css={tw`ml-2 rounded-full bg-red-500 hover:bg-red-600 text-white font-bold px-3 py-2`}
+          >
+            <ArrowUp size={16} />
+          </button>
         </div>
       </Form>
     </Layout>

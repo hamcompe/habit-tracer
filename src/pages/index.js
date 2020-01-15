@@ -166,7 +166,7 @@ const IndexPage = ({ user }) => {
         }}
       >
         <div
-          css={tw`flex fixed inset-x-0 bottom-0 p-4 border-t border-gray-200`}
+          css={tw`flex fixed inset-x-0 bottom-0 py-3 px-4 border-t border-gray-200`}
         >
           <input
             css={css`

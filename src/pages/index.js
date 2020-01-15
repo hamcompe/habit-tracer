@@ -20,15 +20,27 @@ const Form = styled.form`
   ${tw`w-full max-w-sm`}
 `
 const MenuButton = styled.button`
-  ${tw`invisible hover:bg-gray-100 rounded p-1`};
+  ${tw`invisible rounded p-1`};
+  @media (hover: hover) {
+    ${tw`hover:bg-gray-100`}
+  }
 `
 const HabitItem = styled.li`
   transition: background 0.3s ease;
   ${tw`flex justify-between items-center border-b py-2 px-4 hover:bg-gray-200`}
 
-  &:hover {
+  /* On desktop show menu button on hover */
+  @media (hover: hover) {
+    &:hover {
+      ${MenuButton} {
+        ${tw`visible`}
+      }
+    }
+  }
+  /* On mobile always show menu button */
+  @media (pointer: coarse) {
     ${MenuButton} {
-      visibility: visible;
+      ${tw`visible`}
     }
   }
 `
@@ -133,14 +145,12 @@ const IndexPage = ({ user }) => {
                 <Link to={`/tasks?id=${id}`} css={tw`block w-full`}>
                   {value}
                 </Link>
-                <span>
-                  <DeleteButton
-                    onClick={() => {
-                      setOpenDialog(true)
-                      setProcessHabit({ id, value })
-                    }}
-                  />
-                </span>
+                <DeleteButton
+                  onClick={() => {
+                    setOpenDialog(true)
+                    setProcessHabit({ id, value })
+                  }}
+                />
               </HabitItem>
             ))}
           </ul>

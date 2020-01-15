@@ -17,9 +17,12 @@ const Form = styled.form`
   ${tw`w-full max-w-sm`}
 `
 const MenuButton = styled.button`
-  ${tw`invisible rounded p-1`};
+  ${tw`invisible rounded p-1 text-gray-400`};
+  svg {
+    ${tw`stroke-current`};
+  }
   @media (hover: hover) {
-    ${tw`hover:bg-gray-100`}
+    ${tw`hover:bg-gray-200 hover:text-gray-500`}
   }
 `
 const HabitItem = styled.li`
@@ -43,7 +46,7 @@ const HabitItem = styled.li`
 `
 const DeleteButton = props => (
   <MenuButton type="button" {...props}>
-    <Trash2 size={20} color="#a0aec0" />
+    <Trash2 size={20} />
   </MenuButton>
 )
 

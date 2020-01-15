@@ -17,16 +17,27 @@ const DayNumberSegment = styled.ul`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 `
+const checkStyle = ({ checked }) =>
+  checked &&
+  css`
+    ${tw`bg-gray-400`};
+    @media (hover: hover) {
+      ${tw`hover:bg-gray-500`};
+    }
+  `
 const DayList = styled.li`
-  ${tw`text-gray-900 hover:bg-gray-200 border-r border-b p-2`};
+  ${tw`text-gray-900 border-r border-b p-2`};
+  @media (hover: hover) {
+    ${tw`hover:bg-gray-200`};
+  }
   &:nth-of-type(-n + 7) {
     ${tw`border-t`};
   }
   &:nth-of-type(7n + 1) {
     ${tw`border-l`};
   }
+  ${checkStyle}
   ${props => props.unFocus && tw`text-gray-500`};
-  ${props => props.checked && tw`bg-gray-400 hover:bg-gray-500`};
 `
 
 const getMonthYear = date =>

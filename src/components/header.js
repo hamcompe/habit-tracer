@@ -17,7 +17,6 @@ const MenuWrapper = styled.ul`
 const Backdrop = styled.div`
   position: fixed;
   ${tw`inset-0`};
-  /* background: hotpink; */
 `
 const MenuItem = styled.li`
   > * {

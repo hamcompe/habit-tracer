@@ -8,6 +8,7 @@ import tw from "tailwind.macro"
 import { FirebaseContext } from "gatsby-plugin-firebase"
 import LoadingSpinner from "../components/loading-spinner"
 import Calendar from "../components/calendar"
+import withUser from "../helpers/with-user"
 
 const IndexPage = ({ location }) => {
   const { id } = queryString.parse(location.search) || {}
@@ -82,4 +83,4 @@ const IndexPage = ({ location }) => {
   )
 }
 
-export default IndexPage
+export default withUser(IndexPage)

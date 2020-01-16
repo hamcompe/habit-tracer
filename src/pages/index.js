@@ -12,6 +12,7 @@ import withUser from "../helpers/with-user"
 import LoadingSpinner from "../components/loading-spinner"
 import { ArrowUp, Trash2 } from "react-feather"
 import Dialog from "../components/dialog"
+import { getHabits, setHabits as setPersistHabits } from "../lib/optimistic"
 
 const Form = styled.form`
   ${tw`w-full max-w-sm`}
@@ -53,8 +54,14 @@ const DeleteButton = props => (
 const fieldName = "task-name"
 
 const IndexPage = ({ user }) => {
-  const [habits, setHabits] = React.useState([])
-  const [loading, setLoading] = React.useState(true)
+  const [habits, setHabitsState] = React.useState(getHabits())
+  const setHabits = data => {
+    setPersistHabits(data)
+    setHabitsState(data)
+  }
+  const [loading, setLoading] = React.useState(
+    habits.length === 0 ? true : false
+  )
   const firebase = React.useContext(FirebaseContext)
 
   React.useEffect(() => {
@@ -73,36 +80,42 @@ const IndexPage = ({ user }) => {
           .map(doc => ({ id: doc.id, value: doc.data() }))
           .map(data => ({ ...data, value: data.value.habit }))
       )
-      .then(setHabits)
+      .then(habits => {
+        setHabits(habits)
+      })
       .finally(() => {
         setLoading(false)
       })
   }, [firebase, user.isLoggedIn, user.uid])
 
   const handleRemove = docId => {
-    return firebase
-      .firestore()
-      .collection("habits")
-      .doc(docId)
-      .delete()
-      .then(() => {
-        setHabits(habits.filter(habit => habit.id !== docId))
-      })
-  }
-  const handleSubmit = habit => {
-    if (habit === "") return
+    setHabits(habits.filter(habit => habit.id !== docId))
 
     firebase
       .firestore()
       .collection("habits")
-      .add({
-        habit,
-        userId: user.uid,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      .doc(docId)
+      .delete()
+  }
+  const handleSubmit = habit => {
+    if (habit === "") return
+
+    const newHabitRef = firebase
+      .firestore()
+      .collection("habits")
+      .doc()
+
+    setHabits(
+      habits.concat({
+        id: newHabitRef.id,
+        value: habit,
       })
-      .then(doc => {
-        setHabits(habits.concat({ id: doc.id, value: habit }))
-      })
+    )
+    newHabitRef.set({
+      habit,
+      userId: user.uid,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    })
   }
 
   const [openDialog, setOpenDialog] = React.useState(false)

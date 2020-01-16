@@ -14,9 +14,6 @@ import { ArrowUp, Trash2 } from "react-feather"
 import Dialog from "../components/dialog"
 import { getHabits, setHabits as setPersistHabits } from "../lib/optimistic"
 
-const Form = styled.form`
-  ${tw`w-full max-w-sm`}
-`
 const MenuButton = styled.button`
   ${tw`invisible rounded p-1 text-gray-400`};
   svg {
@@ -169,7 +166,9 @@ const IndexPage = ({ user }) => {
           </ul>
         )}
       </section>
-      <Form
+      <form
+        className="container mx-auto"
+        css={tw`flex fixed inset-x-0 bottom-0 py-3 px-4 border-t border-gray-200`}
         onSubmit={e => {
           e.preventDefault()
           const newHabit = e.target.elements[fieldName].value
@@ -181,26 +180,21 @@ const IndexPage = ({ user }) => {
           handleSubmit(newHabit)
         }}
       >
-        <div
-          className="container mx-auto"
-          css={tw`flex fixed inset-x-0 bottom-0 py-3 px-4 border-t border-gray-200`}
+        <input
+          css={css`
+            ${tw`bg-gray-100 appearance-none border border-gray-300 rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-red-500`}
+          `}
+          id={fieldName}
+          type="text"
+          placeholder="New cool habit"
+        />
+        <button
+          type="submit"
+          css={tw`ml-2 rounded-full bg-red-500 hover:bg-red-600 text-white font-bold px-3 py-2`}
         >
-          <input
-            css={css`
-              ${tw`bg-gray-100 appearance-none border border-gray-300 rounded-full w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-red-500`}
-            `}
-            id={fieldName}
-            type="text"
-            placeholder="New cool habit"
-          />
-          <button
-            type="submit"
-            css={tw`ml-2 rounded-full bg-red-500 hover:bg-red-600 text-white font-bold px-3 py-2`}
-          >
-            <ArrowUp size={16} />
-          </button>
-        </div>
-      </Form>
+          <ArrowUp size={16} />
+        </button>
+      </form>
     </Layout>
   )
 }

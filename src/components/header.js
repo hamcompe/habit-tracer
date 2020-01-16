@@ -8,7 +8,8 @@ import { FirebaseContext } from "gatsby-plugin-firebase"
 import { logout } from "../lib/auth"
 
 const MenuWrapper = styled.ul`
-  ${tw`absolute bottom-0 right-0 py-1 bg-white border shadow`};
+  ${tw`absolute mt-4 right-0 py-1 bg-white rounded border shadow`};
+  bottom: -0.625rem;
   ${props =>
     props.isShow ? tw`visible opacity-100` : tw`invisible opacity-0`};
   transition: opacity 0.2s ease;
@@ -35,15 +36,15 @@ const Header = ({ siteTitle, user }) => {
   }
 
   return (
-    <header>
-      <div className="container bg-red-500 mx-auto px-4 py-2 flex justify-between items-center">
+    <header css={tw`fixed top-0 bg-red-500 w-full h-16 shadow`}>
+      <div className="container mx-auto h-full px-4 py-2 flex justify-between items-center">
         <Link css={tw`text-xl font-extrabold text-gray-100`} to="/">
           {siteTitle}
         </Link>
         {user.isLoggedIn ? (
           <div css={tw`relative`}>
             <button
-              className="hover:bg-gray-400 rounded-full"
+              className="align-middle hover:bg-gray-400 rounded-full"
               onClick={() => {
                 setIsShow(!isShow)
               }}

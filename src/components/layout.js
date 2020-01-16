@@ -32,7 +32,7 @@ const Layout = ({ children }) => {
         siteTitle={data.site.siteMetadata.title}
         user={{ ...getUser(), isLoggedIn: isLoggedIn() }}
       />
-      <div className="container" css={tw`mx-auto px-4`}>
+      <div className="container" css={tw`mx-auto px-4 pt-16`}>
         <main>{children}</main>
         {/* <footer className="mt-4">
           © {new Date().getFullYear()}, Built with ❤️ by{" "}

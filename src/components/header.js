@@ -5,6 +5,7 @@ import tw from "tailwind.macro"
 import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import { FirebaseContext } from "gatsby-plugin-firebase"
+import { ChevronLeft } from "react-feather"
 import { logout } from "../lib/auth"
 
 const MenuWrapper = styled.ul`
@@ -25,7 +26,7 @@ const MenuItem = styled.li`
   }
 `
 
-const Header = ({ siteTitle, user }) => {
+const Header = ({ siteTitle, user, isHome }) => {
   const firebase = React.useContext(FirebaseContext)
   const [isShow, setIsShow] = React.useState(false)
 
@@ -38,9 +39,21 @@ const Header = ({ siteTitle, user }) => {
   return (
     <header css={tw`fixed bg-red-500 top-0 w-full h-16 shadow`}>
       <div className="container mx-auto h-full px-4 py-2 flex justify-between items-center">
-        <Link css={tw`text-xl font-extrabold text-gray-100`} to="/">
-          {siteTitle}
-        </Link>
+        {isHome ? (
+          <Link css={tw`text-xl font-extrabold text-gray-100`} to="/">
+            {siteTitle}
+          </Link>
+        ) : (
+          <Link
+            className="text-white hover:bg-red-400 p-1 rounded-full"
+            to="/"
+            css={css`
+              margin-left: -0.75rem;
+            `}
+          >
+            <ChevronLeft size={32} />
+          </Link>
+        )}
         {user.isLoggedIn ? (
           <div css={tw`relative`}>
             <button

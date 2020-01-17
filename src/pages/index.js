@@ -50,7 +50,7 @@ const DeleteButton = props => (
 
 const fieldName = "task-name"
 
-const IndexPage = ({ user }) => {
+const IndexPage = ({ user, location }) => {
   const [habits, setHabitsState] = React.useState(getHabits())
   const setHabits = data => {
     setPersistHabits(data)
@@ -119,7 +119,7 @@ const IndexPage = ({ user }) => {
   const [processHabit, setProcessHabit] = React.useState({})
 
   return (
-    <Layout>
+    <Layout location={location}>
       <SEO title="Home" />
       <Dialog
         content={

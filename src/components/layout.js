@@ -15,7 +15,7 @@ import "normalize.css"
 import "./layout.scss"
 import tw from "tailwind.macro"
 
-const Layout = ({ children }) => {
+const Layout = ({ children, location = {} }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -31,6 +31,7 @@ const Layout = ({ children }) => {
       <Header
         siteTitle={data.site.siteMetadata.title}
         user={{ ...getUser(), isLoggedIn: isLoggedIn() }}
+        isHome={location.pathname === "/"}
       />
       <div className="container" css={tw`mx-auto px-4 pt-16`}>
         <main>{children}</main>

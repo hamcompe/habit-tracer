@@ -36,7 +36,7 @@ const Header = ({ siteTitle, user }) => {
   }
 
   return (
-    <header css={tw`fixed top-0 bg-red-500 w-full h-16 shadow`}>
+    <header css={tw`fixed bg-red-500 top-0 w-full h-16 shadow`}>
       <div className="container mx-auto h-full px-4 py-2 flex justify-between items-center">
         <Link css={tw`text-xl font-extrabold text-gray-100`} to="/">
           {siteTitle}

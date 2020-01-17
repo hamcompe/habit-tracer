@@ -62,7 +62,6 @@ const IndexPage = ({ location }) => {
         <LoadingSpinner />
       ) : (
         <Calendar
-          focusDate={new Date()}
           didAtList={didAtList}
           onClick={({ isDid, date }) => {
             if (isDid) {

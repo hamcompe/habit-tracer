@@ -2,6 +2,7 @@ import React from "react"
 import styled from "@emotion/styled"
 import { css } from "@emotion/core"
 import tw from "tailwind.macro"
+import { ArrowLeft, ArrowRight } from "react-feather"
 
 const CalendarGrid = styled.section`
   font-variant-numeric: tabular-nums;
@@ -40,11 +41,6 @@ const DayLabel = styled.label`
   ${props => props.unFocus && tw`text-gray-500`}
 `
 
-const getMonthYear = date =>
-  date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-  })
 const getMonth = date =>
   date.toLocaleDateString(undefined, {
     month: "long",
@@ -62,16 +58,25 @@ function range({ start, end, num }) {
   const length = num || end - start + 1
   return Array.from({ length }).map((_, idx) => start + idx)
 }
+const addMonth = (date, incrementalMonth) => {
+  const newDate = new Date(date)
+  newDate.setDate(1)
+  newDate.setMonth(date.getMonth() + incrementalMonth)
+  return newDate
+}
+const nextBeginOfMonth = date => addMonth(date, 1)
+const previousBeginOfMonth = date => addMonth(date, -1)
 
 const TOTAL_DAY_CALENDAR = 42
 
 const Calendar = ({
-  focusDate = new Date(),
+  initialFocusDate = new Date(),
   didAtList = [new Date("2020-01-07"), new Date("2020-01-14")],
   onClick = date => {
     alert(`Clicked :${date.date.toDateString()}, is checked: ${date.isDid}`)
   },
 }) => {
+  const [focusDate, setFocusDate] = React.useState(initialFocusDate)
   const lookBackNum = getStartDay(focusDate)
   const beginOfFocusDate = getBeginOfMonth(focusDate)
   const incrementalDayList = range({
@@ -90,10 +95,30 @@ const Calendar = ({
 
   return (
     <CalendarGrid>
-      <h2 css={tw`text-xl text-center mb-4 mt-6`}>
-        <span className="font-bold">{getMonth(focusDate)}</span>{" "}
-        <span className="font-light">{focusDate.getFullYear()}</span>
-      </h2>
+      <div className="flex justify-between items-center mb-4 mt-6">
+        <button
+          className="text-gray-500 hover:bg-gray-200 hover:text-gray-600 p-1 rounded"
+          type="button"
+          onClick={() => {
+            setFocusDate(previousBeginOfMonth(focusDate))
+          }}
+        >
+          <ArrowLeft />
+        </button>
+        <h2 css={tw`text-xl text-center`}>
+          <span className="font-bold">{getMonth(focusDate)}</span>{" "}
+          <span className="font-light">{focusDate.getFullYear()}</span>
+        </h2>
+        <button
+          className="text-gray-500 hover:bg-gray-200 hover:text-gray-600 p-1 rounded"
+          type="button"
+          onClick={() => {
+            setFocusDate(nextBeginOfMonth(focusDate))
+          }}
+        >
+          <ArrowRight />
+        </button>
+      </div>
       <DayTitleSegment>
         <li>Sun</li>
         <li>Mon</li>

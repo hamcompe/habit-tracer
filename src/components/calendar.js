@@ -17,32 +17,36 @@ const DayNumberSegment = styled.ul`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 `
-const checkStyle = ({ checked }) =>
-  checked &&
-  css`
-    ${tw`bg-gray-400`};
-    @media (hover: hover) {
-      ${tw`hover:bg-gray-500`};
-    }
-  `
 const DayList = styled.li`
-  ${tw`text-gray-900 border-r border-b p-2`};
-  @media (hover: hover) {
-    ${tw`hover:bg-gray-200`};
-  }
+  ${tw`border-r border-b`};
   &:nth-of-type(-n + 7) {
     ${tw`border-t`};
   }
   &:nth-of-type(7n + 1) {
     ${tw`border-l`};
   }
-  ${checkStyle}
-  ${props => props.unFocus && tw`text-gray-500`};
+`
+const DayLabel = styled.label`
+  ${tw`block cursor-pointer text-gray-900 p-2`};
+  @media (hover: hover) {
+    ${tw`hover:bg-gray-200`};
+  }
+  input:checked + & {
+    ${tw`bg-gray-400`};
+    @media (hover: hover) {
+      ${tw`hover:bg-gray-500`};
+    }
+  }
+  ${props => props.unFocus && tw`text-gray-500`}
 `
 
 const getMonthYear = date =>
   date.toLocaleDateString(undefined, {
     year: "numeric",
+    month: "long",
+  })
+const getMonth = date =>
+  date.toLocaleDateString(undefined, {
     month: "long",
   })
 
@@ -86,8 +90,9 @@ const Calendar = ({
 
   return (
     <CalendarGrid>
-      <h2 css={tw`text-l font-semibold text-center mb-4 mt-6`}>
-        {getMonthYear(focusDate)}
+      <h2 css={tw`text-xl text-center mb-4 mt-6`}>
+        <span className="font-bold">{getMonth(focusDate)}</span>{" "}
+        <span className="font-light">{focusDate.getFullYear()}</span>
       </h2>
       <DayTitleSegment>
         <li>Sun</li>
@@ -100,13 +105,22 @@ const Calendar = ({
       </DayTitleSegment>
       <DayNumberSegment>
         {calendarDayList.map(date => (
-          <DayList
-            key={date.getTime()}
-            checked={isDid(date)}
-            unFocus={thisMonth !== date.getMonth()}
-            onClick={() => onClick({ isDid: isDid(date), date: date })}
-          >
-            {date.getDate()}
+          <DayList key={date.getTime()}>
+            <input
+              className="hidden"
+              id={date.getTime()}
+              type="checkbox"
+              onChange={() => {
+                onClick({ isDid: isDid(date), date: date })
+              }}
+              checked={isDid(date)}
+            />
+            <DayLabel
+              htmlFor={date.getTime()}
+              unFocus={thisMonth !== date.getMonth()}
+            >
+              {date.getDate()}
+            </DayLabel>
           </DayList>
         ))}
       </DayNumberSegment>
